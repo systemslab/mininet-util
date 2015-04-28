@@ -8,6 +8,8 @@ plot_defaults.quarter_size()
 
 from matplotlib.ticker import MaxNLocator
 from pylab import figure
+import matplotlib
+from matplotlib.lines import Line2D
 
 
 parser = argparse.ArgumentParser()
@@ -17,6 +19,20 @@ parser.add_argument('--files', '-f',
                     action="store",
                     nargs='+',
                     dest="files")
+
+parser.add_argument('--maxx',
+                    help="Max time on x-axis..",
+		    type=int,
+                    default=60,
+                    action="store",
+                    dest="maxx")
+
+parser.add_argument('--minx',
+                    help="Min time on x-axis..",
+		    type=int,
+                    default=0,
+                    action="store",
+                    dest="minx")
 
 parser.add_argument('--maxy',
                     help="Max mbps on y-axis..",
@@ -80,9 +96,15 @@ if args.legend is None:
 to_plot=[]
 def get_style(i):
     if i == 0:
-        return {'color': 'red'}
+        return {'color': 'red', 'ls': '-', 'lw': 0.5, 'marker': 'x'}
+    elif i == 1:
+        return {'color': 'orange', 'ls': '--', 'lw': 0.5, 'marker': '+'}
+    elif i == 2:
+        return {'color': 'blue', 'ls': '-.', 'lw': 0.5, 'marker': 's', 'ms': 4.0, 'mec': 'blue', 'mfc': 'None'}
+    elif i == 3:
+        return {'color': 'cyan', 'ls': '-', 'lw': 0.5, 'marker': 'D', 'ms': 4.0, 'mec': 'cyan', 'mfc': 'None'}
     else:
-        return {'color': 'black', 'ls': '-.'}
+        return {'color': 'green', 'ls': ':', 'lw': 0.5, 'marker': 'o', 'ms': 4.0, 'mec': 'green', 'mfc': 'None'}
 
 print args.files
 fig = figure()
@@ -99,22 +121,27 @@ for i, f in enumerate(args.files):
     else:
         xaxis = xaxis[::args.every]
         qlens = qlens[::args.every]
-        ax.plot(xaxis, qlens, label=args.legend[i], lw=2, **get_style(i))
+        ax.plot(xaxis, qlens, label=args.legend[i], **get_style(i))
 
     ax.xaxis.set_major_locator(MaxNLocator(4))
 
 
 
+font = {'size'   : 8}
+#font = {'family' : 'normal',
+        #'weight' : 'bold',
 
+matplotlib.rc('font', **font)
 
 #plt.title("Queue sizes")
 plt.title("")
-plt.ylabel("Packets")
+plt.ylabel("Packets", fontsize=12)
 plt.grid(True)
 #yaxis = range(0, 1101, 50)
 #ylabels = map(lambda y: str(y) if y%100==0 else '', yaxis)
 #plt.yticks(yaxis, ylabels)
 #plt.ylim((0,1100))
+plt.xlim((args.minx,args.maxx))
 plt.ylim((args.miny,args.maxy))
 
 if args.summarise:
@@ -139,19 +166,21 @@ elif args.cdf:
     ax = fig.add_subplot(111)
     for i,data in enumerate(to_plot):
         xs, ys = cdf(map(int, data))
-        ax.plot(xs, ys, label=args.legend[i], lw=2, **get_style(i))
+        ax.plot(xs, ys, label=args.legend[i], **get_style(i))
         plt.ylabel("Fraction")
         plt.xlabel("Packets")
         plt.ylim((0, 1.0))
-        plt.legend(args.legend, loc="upper left")
+        plt.legend(args.legend, loc="upper left", frameon=False, fontsize=10)
         plt.title("")
         ax.xaxis.set_major_locator(MaxNLocator(4))
 else:
-    plt.xlabel("Seconds")
+    plt.xlabel("Seconds", fontsize=12)
+    plt.tick_params(axis='both', which='major', labelsize=10)
+    plt.tick_params(axis='both', which='minor', labelsize=8)
     if args.legend:
-        plt.legend(args.legend, loc="upper left")
+        plt.legend(args.legend, loc="upper left", frameon=False, fontsize=10)
     else:
-        plt.legend(args.files)
+        plt.legend(args.files, frameon=False)
 
 if args.out:
     plt.savefig(args.out)

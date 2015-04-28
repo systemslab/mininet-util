@@ -1,4 +1,6 @@
 from helper import *
+import matplotlib
+from matplotlib.lines import Line2D
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--files', '-f',
@@ -78,6 +80,11 @@ args = parser.parse_args()
 if args.labels is None:
     args.labels = args.files
 
+if args.legend is None:
+    args.legend = []
+    for file in args.files:
+        args.legend.append(file.replace('txrate-', '').replace('.txt', ''))
+
 pat_iface = re.compile(args.pat_iface)
 
 to_plot=[]
@@ -128,22 +135,31 @@ for f in args.files:
         for k in sorted(rate.keys()):
             if pat_iface.match(k):
                 print k
-                plt.plot(rate[k], label=k)
+                plt.plot(rate[k], label=k, lw=0.1)
 
-plt.title("TX rates")
+font = {'size'   : 8}
+#font = {'family' : 'normal',
+        #'weight' : 'bold',
+
+matplotlib.rc('font', **font)
+
+plt.title("TX rates", fontsize=12)
 if args.rx:
-    plt.title("RX rates")
+    plt.title("RX rates", fontsize=12)
 
 if args.ylabel:
     plt.ylabel(args.ylabel)
 elif args.normalise:
-    plt.ylabel("Normalized BW")
+    plt.ylabel("Normalized BW", fontsize=12)
 else:
-    plt.ylabel("Mbps")
+    plt.ylabel("Mbps", fontsize=12)
 
 plt.grid()
-plt.legend()
+plt.legend(loc="upper right")
 plt.ylim((int(args.miny), int(args.maxy)))
+
+plt.tick_params(axis='both', which='major', labelsize=10)
+plt.tick_params(axis='both', which='minor', labelsize=8)
 
 if args.summarise:
     plt.boxplot(to_plot)
@@ -151,11 +167,11 @@ if args.summarise:
 
 if not args.summarise:
     if args.xlabel:
-        plt.xlabel(args.xlabel)
+        plt.xlabel(args.xlabel, fontsize=12)
     else:
-        plt.xlabel("Time")
+        plt.xlabel("Time", fontsize=12)
     if args.legend:
-        plt.legend(args.legend)
+        plt.legend(args.legend, loc="upper right")
 
 if args.out:
     plt.savefig(args.out)

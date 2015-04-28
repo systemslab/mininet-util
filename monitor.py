@@ -4,6 +4,29 @@ import re
 
 default_dir = '.'
 
+def monitor_ss(port, interval_sec = 0.01, fname='%s/ss.txt' % default_dir):
+#/usr/local/bin/ss -i '( dport = :5001 )'
+#Netid State      Recv-Q Send-Q                                       Local Address:Port                                       Peer Address:Port         
+#tcp   ESTAB      0      262038                                           127.0.0.1:34002                                                                               127.0.0.1:5001                                      
+#         inigo wscale:9,9 rto:210 rtt:0.216/0.183 mss:65483 cwnd:115 ce_state 0 dctcp_alpha 15 ab_ecn 0 ab_tot 130966 rtt_min 1 rtt_alpha 1024 delayed_cnt 0 send 278909.1Mbps lastrcv:347191980 unacked:4 rcv_space:43690
+    pat_queued = re.compile(r'dctcp_alpha (\d+) ab_ecn (\d+) ab_tot (\d+) rtt_min (\d+) rtt_alpha (\d+) delayed_cnt (\d+)')
+    cmd = "/usr/local/bin/ss -i '( dport = :{} )'".format(port)
+    f = open(fname, 'w')
+    f.write('')
+    while 1:
+        p = Popen(cmd, shell=True, stdout=PIPE)
+        output = p.stdout.read()
+        # Not quite right, but will do for now
+        matches = pat_queued.findall(output)
+        t = "%f" % time()
+        if matches:
+            f.write(t + ','.join(matches) + '\n')
+        else:
+            f.write(t + ',' + output + '\n')
+
+        sleep(interval_sec)
+    return
+
 def monitor_qlen(iface, interval_sec = 0.01, fname='%s/qlen.txt' % default_dir):
     pat_queued = re.compile(r'backlog\s[^\s]+\s([\d]+)p')
     cmd = "tc -s qdisc show dev %s" % (iface)
@@ -18,6 +41,9 @@ def monitor_qlen(iface, interval_sec = 0.01, fname='%s/qlen.txt' % default_dir):
             ret.append(matches[1])
             t = "%f" % time()
             open(fname, 'a').write(t + ',' + matches[1] + '\n')
+        elif matches:
+            t = "%f" % time()
+            open(fname, 'a').write(t + ',' + matches[0] + '\n')
         sleep(interval_sec)
     #open('qlen.txt', 'w').write('\n'.join(ret))
     return

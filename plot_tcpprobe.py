@@ -3,7 +3,7 @@ from collections import defaultdict
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-p', '--port', dest="port", default='5001')
+parser.add_argument('-p', '--port', dest="port", nargs='+', default=['5001'])
 parser.add_argument('-f', dest="files", nargs='+', required=True)
 parser.add_argument('-o', '--out', dest="out", default=None)
 parser.add_argument('-H', '--histogram', dest="histogram",
@@ -21,7 +21,11 @@ def second(lst):
 
 """
 Sample line:
+# old
 2.221032535 10.0.0.2:39815 10.0.0.1:5001 32 0x1a2a710c 0x1a2a387c 11 2147483647 14592 85
+# new
+# time src dst length snd_nxt snd_una snd_cwnd ssthresh snd_wnd srtt rcv_wnd
+0.001015278 10.0.0.2:47115 10.0.0.1:5001 32 0xef7732db 0xef7338bb 216 2147483647 509952 1 29696
 """
 def parse_file(f):
     times = defaultdict(list)
@@ -29,16 +33,16 @@ def parse_file(f):
     srtt = []
     for l in open(f).xreadlines():
         fields = l.strip().split(' ')
-        if len(fields) != 10:
+        if len(fields) < 10:
             break
-        if fields[2].split(':')[1] != args.port:
+        if fields[2].split(':')[1] not in args.port:
             continue
         sport = int(fields[1].split(':')[1])
         times[sport].append(float(fields[0]))
 
         c = int(fields[6])
         cwnd[sport].append(c * 1480 / 1024.0)
-        srtt.append(int(fields[-1]))
+        srtt.append(int(fields[-2]))
     return times, cwnd
 
 added = defaultdict(int)
