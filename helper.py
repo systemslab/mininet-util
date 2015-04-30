@@ -100,19 +100,28 @@ def parse_cpu_usage(fname, nprocessors=8):
 
     """Typical line looks like:
     Cpu0  :  0.0%us,  1.0%sy,  0.0%ni, 97.0%id,  0.0%wa,  0.0%hi,  2.0%si,  0.0%st
+    or
+    %Cpu(s):  0.3 us,  0.4 sy,  0.0 ni, 98.6 id,  0.0 wa,  0.5 hi,  0.2 si,  0.0 st
     """
     ret = [] 
     for collection in data:
-        total = [0]*8
+        total = [0]*7
         for cpu in collection:
+          if not cpu:
+              continue
           usages = cpu.split(':')[1]
-          usages = map(lambda e: e.split('%')[0],
-                       usages.split(','))
+          if cpu[0] == 'C':
+              usages = map(lambda e: e.split('%')[0],
+                           usages.split(','))
+          else:
+              usages = map(lambda e: e.split(' ')[2],
+                           usages.split(','))
+		# Skip idle time
+          usages = usages[0:3] + usages[4:]
           for i in xrange(len(usages)):
               total[i] += float(usages[i])
         total = map(lambda t: t/nprocessors, total)
-		# Skip idle time
-        ret.append(total[0:3] + total[4:])
+        ret.append(total)
     return ret
 
 def pc95(lst):
