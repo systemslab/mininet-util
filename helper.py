@@ -109,13 +109,7 @@ def parse_cpu_usage(fname, nprocessors=8):
         for cpu in collection:
           if not cpu:
               continue
-          usages = cpu.split(':')[1]
-          if cpu[0] == 'C':
-              usages = map(lambda e: e.split('%')[0],
-                           usages.split(','))
-          else:
-              usages = map(lambda e: e.split(' ')[2],
-                           usages.split(','))
+          usages = re.findall(r"\d[\d\.]+", cpu)
 		# Skip idle time
           usages = usages[0:3] + usages[4:]
           for i in xrange(len(usages)):
