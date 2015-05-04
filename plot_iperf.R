@@ -23,21 +23,17 @@ allrates <- cbind(totals)
 
 png(file="iperf.png", height=600, width=600, pointsize=12)
 
-ts <- 0
 for (i in clients) {
   name <- argv[1+i]
   iperf <- read.table(name, sep=",", header=F)
-  rates <- c(rep(0, ts*i), iperf$V9, rep(0, ts*(n-i)))
+  rates <- c(rep(0, tshift*(i-2) - (i-2)), iperf$V9, rep(0, tshift*(n+1-i) + (i-2)))
   totals <- totals + rates
   allrates <- cbind(allrates, rates)
-  ts <- ts + tshift
-
-  #rates1 <- c(iperf1$V9, rep(NA, tshift))
-  #rates2 <- c(rep(NA, tshift), iperf2$V9)
+  print(allrates)
 }
 
 maxy <- max(maxy, totals / 1000000)
-maxtotal <- max(totals / 1000000)
+maxtotal <- max(totals[tshift:length(totals)-tshift] / 1000000)
 
 d <- data.frame(allrates)
 d$totals <- totals
@@ -58,10 +54,10 @@ for (i in clients) {
 }
 
 abline(h=maxtotal, col="grey")
-text(max(timesteps), maxtotal, col="black", paste(maxtotal))
-mintotal <- min(totals / 1000000)
+text(max(timesteps), maxtotal, col="black", format(maxtotal, digits=2))
+mintotal <- min(totals[tshift:length(totals)-tshift] / 1000000)
 abline(h=mintotal, col="grey")
-text(max(timesteps), mintotal, col="black", paste(mintotal))
+text(max(timesteps), mintotal, col="black", format(mintotal, digits=2))
 
 axis(1, las=1, cex.axis=1.0)
 axis(2, las=1, cex.axis=1.0)
