@@ -20,6 +20,7 @@ d1tshifted <- d1$V1 - min(d1$V1)
 t$d1 <- d1tshifted
 maxt <- max(d1tshifted)
 srtts$d1 <- d1$V10
+srtt_min <- min(d1$V10)
 srtt_max <- max(d1$V10)
 
 if (length(argv) > 1) {
@@ -101,7 +102,7 @@ colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "
 
 plot(d1tshifted, d1$V10, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
 	axes=F, ann=T, xlab="Time (s)", ylab="Smoothed RTT (us)",
-	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(0, srtt_max))
+	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(max(1, srtt_min), srtt_max))
 
 for (i in 2:length(argv)) {
 	lines(unlist(t[i]), unlist(srtts[i]), type="o", lty=i, pch=i, lw=1, cex=0.5, col=colors[i])
@@ -123,7 +124,7 @@ legend("left", argv, cex=1.0,
 dev.off()
 
 png(file="srtt-cdf.png", height=800, width=800, pointsize=12)
-plot(0, 0, xlab="Smoothed RTT (us)", ylab="Probability", xlim=c(0, srtt_max), ylim=c(0, 1),
+plot(0, 0, xlab="Smoothed RTT (us)", ylab="Probability", xlim=c(max(1, srtt_min), srtt_max), ylim=c(0, 1),
 	log="x", type="n", axes=F, ann=T)
 for (i in 1:length(argv)) {
 	lines(ecdf(unlist(srtts[i])), lty=i, pch=i, lw=2, col=colors[i])
