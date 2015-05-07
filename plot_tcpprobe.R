@@ -17,7 +17,11 @@ d1name <- argv[1]
 d1 <- fread(d1name)
 d1tshifted <- d1$V1 - min(d1$V1)
 maxt <- max(d1tshifted)
-hbinsd1 <- hexbin(d1tshifted, log(d1$V10), xbins=100)
+
+if (length(argv) == 1) {
+	hbinsd1 <- hexbin(d1tshifted, log(d1$V10), xbins=100)
+}
+
 srtt_min <- min(d1$V10)
 srtt_max <- max(d1$V10)
 srtt_max9999th <- quantile(d1$V10, c(0.9999))
@@ -95,14 +99,42 @@ if (length(argv) > 7) {
 
 png(file="srtt.png", height=900, width=1500, pointsize=12)
 
-plot(hbinsd1, xlab="Time (s)", ylab="Log of Smoothed RTT (us)")
- 
-# Turn off device driver (to flush output)
-dev.off()
-
 colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
 ltys <- rep(1:8)
 pchs <- rep(1:8)
+
+if (length(argv) == 1) {
+	plot(hbinsd1, xlab="Time (s)", ylab="Log of Smoothed RTT (us)")
+} else {
+	plot(d1tshifted, d1$V10, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
+		axes=F, ann=T, xlab="Time (s)", ylab="Smoothed RTT (us)",
+		log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(max(1, srtt_min), srtt_max))
+
+	if (length(argv) > 1) {
+		lines(d2tshifted, d2$V10, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
+	}
+	if (length(argv) > 2) {
+		lines(d3tshifted, d3$V10, type="o", lty=3, pch=3, lw=1, cex=0.5, col=colors[3])
+	}
+	if (length(argv) > 3) {
+		lines(d4tshifted, d4$V10, type="o", lty=4, pch=4, lw=1, cex=0.5, col=colors[4])
+	}
+	if (length(argv) > 4) {
+		lines(d5tshifted, d5$V10, type="o", lty=5, pch=5, lw=1, cex=0.5, col=colors[5])
+	}
+	if (length(argv) > 5) {
+		lines(d6tshifted, d6$V10, type="o", lty=6, pch=6, lw=1, cex=0.5, col=colors[6])
+	}
+	if (length(argv) > 6) {
+		lines(d7tshifted, d7$V10, type="o", lty=7, pch=7, lw=1, cex=0.5, col=colors[7])
+	}
+	if (length(argv) > 7) {
+		lines(d8tshifted, d8$V10, type="o", lty=8, pch=8, lw=1, cex=0.5, col=colors[8])
+	}
+}
+
+# Turn off device driver (to flush output)
+dev.off()
 
 png(file="srtt-cdf.png", height=800, width=800, pointsize=12)
 plot(1, 1, xlab="Smoothed RTT (us)", ylab="Probability", xlim=c(max(1, srtt_min0001st), srtt_max9999th), ylim=c(0, 1),
