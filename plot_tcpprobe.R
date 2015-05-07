@@ -131,6 +131,9 @@ if (length(argv) == 1) {
 	if (length(argv) > 7) {
 		lines(d8tshifted, d8$V10, type="o", lty=8, pch=8, lw=1, cex=0.5, col=colors[8])
 	}
+
+	legend("topright", argv, cex=1.0, col=colors[1:length(argv)],
+		lty=ltys[1:length(argv)], pch=pchs[1:length(argv)], lwd=3, bty="n");
 }
 
 # Turn off device driver (to flush output)
