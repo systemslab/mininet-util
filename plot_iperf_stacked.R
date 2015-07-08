@@ -1,5 +1,11 @@
 #!/usr/bin/env Rscript
 
+# This script requires iperf's output to be fixed with something like:
+# grep -Ev ",(0.0-[^1])|,(0.0-1[0-9]+)" iperf_h1.txt | sed 's/-/,/' > iperf_h1.txt.fixed
+#
+# This is because that the initial time column can have huge gaps that don't really exist,
+# at least in Mininet experiments.
+
 argv <- commandArgs(TRUE)
           
 usage <- function() {
@@ -18,17 +24,10 @@ library(RColorBrewer)
 
 png(file="iperf-stacked.png", height=600, width=600, pointsize=12)
 
-iperf <- read.csv(iperfname, head=F, skip=1, col.names=c("Time", "server", "port", "Client", "clientport", "id", "interval", "bytes", "Rate"))
+iperf <- read.csv(iperfname, head=F, skip=1, col.names=c("Time", "server", "port", "Client", "clientport", "id", "Start", "Stop", "bytes", "Rate"))
 
-# start time from zero
-iperf$Time <- as.numeric(iperf$Time) - min(as.numeric(iperf$Time))
-
-# exclude intervals like 0.0-0.0 and 0.0-30.0
-#print(iperf[grepl("(^0.0-[^1])|(^0.0-1[0-9]+)", iperf$interval, perl=TRUE), ])
-iperf <- iperf[!grepl("(^0.0-[^1])|(^0.0-1[0-9]+)", iperf$interval), ]
-
-# sort by time, then client
-iperf <- iperf[with(iperf, order(Client)), ]
+# sort by start time, then client
+iperf <- iperf[with(iperf, order(Start, Client)), ]
 
 iperf$Client <- factor(as.numeric(iperf$Client))
 
@@ -37,7 +36,7 @@ iperf$Client <- factor(as.numeric(iperf$Client))
 colourCount = length(unique(iperf$Client))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
-qplot(Time, Rate, data = iperf, fill = Client, geom = "bar", stat = "identity") +
+qplot(Start, Rate, data = iperf, fill = Client, geom = "bar", stat = "identity") +
 	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("Average Rate (Gbps)") +
 	xlab("Time (s)") +
