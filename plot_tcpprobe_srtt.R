@@ -32,9 +32,16 @@ d1 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 d1tshifted <- d1$Time - min(d1$Time, na.rm=TRUE)
 maxt <- max(d1tshifted, na.rm=TRUE)
 
-if (n == 1) {
+png(file="srtt.png", height=900, width=1500, pointsize=12)
+
+colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
+ltys <- rep(1:8)
+pchs <- rep(1:8)
+
+if (n == 1 && !(0 %in% d1$SRTT)) {
 	require(hexbin)
 	hbinsd1 <- hexbin(d1tshifted, log(d1$SRTT / rtt_scale), xbins=100)
+	plot(hbinsd1, xlab="Time (s)", ylab=paste("Log of Smoothed RTT ", rtt_units))
 }
 
 srtt_min <- min(d1$SRTT, na.rm=TRUE) / rtt_scale
@@ -112,44 +119,34 @@ if (n > 7) {
 	srtt_min00001st <- min(srtt_min00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
 }
 
-png(file="srtt.png", height=900, width=1500, pointsize=12)
+plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
+	axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
+	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
 
-colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
-ltys <- rep(1:8)
-pchs <- rep(1:8)
-
-if (n == 1) {
-	plot(hbinsd1, xlab="Time (s)", ylab=paste("Log of Smoothed RTT ", rtt_units))
-} else {
-	plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
-		axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
-		log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
-
-	if (n > 1) {
-		lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
-	}
-	if (n > 2) {
-		lines(d3tshifted, d3$SRTT / rtt_scale, type="o", lty=3, pch=3, lw=1, cex=0.5, col=colors[3])
-	}
-	if (n > 3) {
-		lines(d4tshifted, d4$SRTT / rtt_scale, type="o", lty=4, pch=4, lw=1, cex=0.5, col=colors[4])
-	}
-	if (n > 4) {
-		lines(d5tshifted, d5$SRTT / rtt_scale, type="o", lty=5, pch=5, lw=1, cex=0.5, col=colors[5])
-	}
-	if (n > 5) {
-		lines(d6tshifted, d6$SRTT / rtt_scale, type="o", lty=6, pch=6, lw=1, cex=0.5, col=colors[6])
-	}
-	if (n > 6) {
-		lines(d7tshifted, d7$SRTT / rtt_scale, type="o", lty=7, pch=7, lw=1, cex=0.5, col=colors[7])
-	}
-	if (n > 7) {
-		lines(d8tshifted, d8$SRTT / rtt_scale, type="o", lty=8, pch=8, lw=1, cex=0.5, col=colors[8])
-	}
-
-	legend("topright", tcpprobenames, cex=1.0, col=colors[1:n],
-		lty=ltys[1:n], pch=pchs[1:n], lwd=3, bty="n");
+if (n > 1) {
+	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
 }
+if (n > 2) {
+	lines(d3tshifted, d3$SRTT / rtt_scale, type="o", lty=3, pch=3, lw=1, cex=0.5, col=colors[3])
+}
+if (n > 3) {
+	lines(d4tshifted, d4$SRTT / rtt_scale, type="o", lty=4, pch=4, lw=1, cex=0.5, col=colors[4])
+}
+if (n > 4) {
+	lines(d5tshifted, d5$SRTT / rtt_scale, type="o", lty=5, pch=5, lw=1, cex=0.5, col=colors[5])
+}
+if (n > 5) {
+	lines(d6tshifted, d6$SRTT / rtt_scale, type="o", lty=6, pch=6, lw=1, cex=0.5, col=colors[6])
+}
+if (n > 6) {
+	lines(d7tshifted, d7$SRTT / rtt_scale, type="o", lty=7, pch=7, lw=1, cex=0.5, col=colors[7])
+}
+if (n > 7) {
+	lines(d8tshifted, d8$SRTT / rtt_scale, type="o", lty=8, pch=8, lw=1, cex=0.5, col=colors[8])
+}
+
+legend("topright", tcpprobenames, cex=1.0, col=colors[1:n],
+	lty=ltys[1:n], pch=pchs[1:n], lwd=3, bty="n");
 
 if (n > 1) {
 	axis(1, las=1, cex.axis=1.0)
