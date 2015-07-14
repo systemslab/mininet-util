@@ -14,12 +14,12 @@ if (length(argv) < 2) {
 
 rtt_min <- as.numeric(argv[1])
 rtt_scale <- 1
-rtt_units <- expression(paste("(", mu, "s)"))
+rtt_units <- "(usec)"
 
 if (rtt_min > 1000) {
 	rtt_scale <- 1000
 	rtt_min <- rtt_min / rtt_scale
-	rtt_units <- "(ms)"
+	rtt_units <- "(msec)"
 }
 
 tcpprobenames <- argv[-1]
@@ -120,8 +120,8 @@ if (n > 7) {
 }
 
 plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
-	axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
-	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
+	axes=F, ann=T, xlab="Time (s)", ylab=paste("Smoothed RTT", rtt_units),
+	xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
 
 if (n > 1) {
 	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
@@ -148,10 +148,8 @@ if (n > 7) {
 legend("topright", tcpprobenames, cex=1.0, col=colors[1:n],
 	lty=ltys[1:n], pch=pchs[1:n], lwd=3, bty="n");
 
-if (n > 1) {
-	axis(1, las=1, cex.axis=1.0)
-	axis(2, las=1, cex.axis=1.0)
-}
+axis(1, las=1, cex.axis=1.0)
+axis(2, las=1, cex.axis=1.0)
 
 # Turn off device driver (to flush output)
 dev.off()
