@@ -14,12 +14,12 @@ if (length(argv) < 2) {
 
 rtt_min <- as.numeric(argv[1])
 rtt_scale <- 1
-rtt_units <- "(usec)"
+rtt_units <- "(us)"
 
 if (rtt_min > 1000) {
 	rtt_scale <- 1000
 	rtt_min <- rtt_min / rtt_scale
-	rtt_units <- "(msec)"
+	rtt_units <- "(ms)"
 }
 
 tcpprobenames <- argv[-1]
@@ -32,16 +32,15 @@ d1 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 d1tshifted <- d1$Time - min(d1$Time, na.rm=TRUE)
 maxt <- max(d1tshifted, na.rm=TRUE)
 
-png(file="srtt.png", height=900, width=1500, pointsize=12)
-
 colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
 ltys <- rep(1:8)
 pchs <- rep(1:8)
 
-if (n == 1 && !(0 %in% d1$SRTT)) {
+if (n == 1) {
 	require(hexbin)
-	hbinsd1 <- hexbin(d1tshifted, log(d1$SRTT / rtt_scale), xbins=100)
-	plot(hbinsd1, xlab="Time (s)", ylab=paste("Log of Smoothed RTT ", rtt_units))
+	hbinsd1 <- hexbin(d1tshifted, d1$SRTT / rtt_scale, xbins=100)
+	png(file="srtt-hex.png", height=900, width=1500, pointsize=12)
+	plot(hbinsd1, xlab="Time (s)", ylab=paste("SRTT\n", rtt_units))
 }
 
 srtt_min <- min(d1$SRTT, na.rm=TRUE) / rtt_scale
@@ -119,6 +118,7 @@ if (n > 7) {
 	srtt_min00001st <- min(srtt_min00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
 }
 
+png(file="srtt.png", height=900, width=1500, pointsize=12)
 plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=0, pch=1, lwd=1, cex=0.5,
 	axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
 	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
