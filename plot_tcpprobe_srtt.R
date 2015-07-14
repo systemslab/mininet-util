@@ -119,9 +119,9 @@ if (n > 7) {
 	srtt_min00001st <- min(srtt_min00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
 }
 
-plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=1, pch=1, lwd=1, cex=0.5,
-	axes=F, ann=T, xlab="Time (s)", ylab=paste("Smoothed RTT", rtt_units),
-	xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
+plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=0, pch=1, lwd=1, cex=0.5,
+	axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
+	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
 
 if (n > 1) {
 	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
