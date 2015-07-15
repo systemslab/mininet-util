@@ -32,7 +32,7 @@ d1 <- cbind(d1, Time)
 d1 <- d1[with(d1, order(Time, Client)), ]
 d1$Client <- factor(as.numeric(d1$Client) - 1)
 
-d1 <- d1[d1$Server == server, ]
+d1 <- d1[grepl(server, d1$Server), ]
 
 #print(d1)
 
