@@ -37,24 +37,12 @@ colourCount = length(unique(iperf$Client))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
 qplot(Start, Rate, data = iperf, fill = Client, geom = "bar", stat = "identity") +
-	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("Average Rate (Gbps)") +
 	xlab("Time (s)") +
-	ylim(0, max(iperf$Rate, na.rm=TRUE)) +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	scale_y_continuous(labels = function(x) format(x/1000000000)) +
 	guides(fill = guide_legend(reverse = TRUE)) +
-	#theme with white background
 	theme_bw() +
-
-	#eliminates background, gridlines, and chart border
-	theme(
-	plot.background = element_blank()
-	,panel.grid.major = element_blank()
-	,panel.grid.minor = element_blank()
-	,panel.border = element_blank()
-	) +
-
-	#draws x and y axis line
-	theme(axis.line = element_line(color = 'black'))
+	theme(panel.grid.minor = element_line(colour="grey", linetype="dotted"))
 
 dev.off()
