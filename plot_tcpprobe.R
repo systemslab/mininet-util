@@ -144,7 +144,7 @@ breaks <- axTicks(side=2)
 png(file=paste("srtt-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
 srtt_max <- max(tcp_probe$SRTT, na.rm=TRUE)
-qplot(Time, SRTT, data = tcp_probe, colour = Client, geom = "line") +
+qplot(Time, SRTT, data = tcp_probe, colour = Client, geom = "jitter") +
 	ylab(paste("log SRTT", rtt_units)) +
 	xlab("Time (s)") +
 	scale_y_log10(limits=c(rtt_min, srtt_max), breaks=breaks) +

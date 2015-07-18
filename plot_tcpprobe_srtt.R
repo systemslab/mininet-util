@@ -124,25 +124,25 @@ plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=0, pch=1, lwd
 	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
 
 if (n > 1) {
-	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=2, pch=2, lw=1, cex=0.5, col=colors[2])
+	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=0, pch=2, lw=1, cex=0.5, col=colors[2])
 }
 if (n > 2) {
-	lines(d3tshifted, d3$SRTT / rtt_scale, type="o", lty=3, pch=3, lw=1, cex=0.5, col=colors[3])
+	lines(d3tshifted, d3$SRTT / rtt_scale, type="o", lty=0, pch=3, lw=1, cex=0.5, col=colors[3])
 }
 if (n > 3) {
-	lines(d4tshifted, d4$SRTT / rtt_scale, type="o", lty=4, pch=4, lw=1, cex=0.5, col=colors[4])
+	lines(d4tshifted, d4$SRTT / rtt_scale, type="o", lty=0, pch=4, lw=1, cex=0.5, col=colors[4])
 }
 if (n > 4) {
-	lines(d5tshifted, d5$SRTT / rtt_scale, type="o", lty=5, pch=5, lw=1, cex=0.5, col=colors[5])
+	lines(d5tshifted, d5$SRTT / rtt_scale, type="o", lty=0, pch=5, lw=1, cex=0.5, col=colors[5])
 }
 if (n > 5) {
-	lines(d6tshifted, d6$SRTT / rtt_scale, type="o", lty=6, pch=6, lw=1, cex=0.5, col=colors[6])
+	lines(d6tshifted, d6$SRTT / rtt_scale, type="o", lty=0, pch=6, lw=1, cex=0.5, col=colors[6])
 }
 if (n > 6) {
-	lines(d7tshifted, d7$SRTT / rtt_scale, type="o", lty=7, pch=7, lw=1, cex=0.5, col=colors[7])
+	lines(d7tshifted, d7$SRTT / rtt_scale, type="o", lty=0, pch=7, lw=1, cex=0.5, col=colors[7])
 }
 if (n > 7) {
-	lines(d8tshifted, d8$SRTT / rtt_scale, type="o", lty=8, pch=8, lw=1, cex=0.5, col=colors[8])
+	lines(d8tshifted, d8$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[8])
 }
 
 legend("topright", tcpprobenames, cex=1.0, col=colors[1:n],
@@ -155,7 +155,7 @@ axis(2, las=1, cex.axis=1.0)
 dev.off()
 
 png(file="srtt-cdf.png", height=800, width=800, pointsize=12)
-plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="Probability", xlim=c(rtt_min, srtt_max99999th), ylim=c(0, 1),
+plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="ECDF(SRTT)", xlim=c(rtt_min, srtt_max99999th), ylim=c(0, 1),
 	log="x", type="n", axes=F, ann=T)
 
 lines(ecdf(d1$SRTT / rtt_scale), lw=2, lty=1, pch=1, col=colors[1])
