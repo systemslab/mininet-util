@@ -36,11 +36,11 @@ d1 <- d1[grepl(server, d1$Server), ]
 
 #print(d1)
 
-colourCount = length(unique(d1$Client))
+colourCount = max(2, length(unique(d1$Client)))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
 
 qplot(Time, cwnd, data = d1, colour = Client, geom = "line") +
-	scale_fill_manual(values = getPalette(colourCount)) +
+	#scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("cwnd (packets)") +
 	xlab("Time (s)") +
 	ylim(0, max(d1$cwnd, na.rm=TRUE)) +

@@ -188,4 +188,19 @@ legend("bottomright", tcpprobenames, cex=1.0,
 	col=colors[1:n],
 	lty=ltys[1:n], pch=pchs[1:n], lwd=3, bty="n");
 
+# From Nathan:
+# Putting the SRTTs into 1 DF:
+#
+# > tcpprobename <- "cdg+rcv_cc"
+# > d1 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+# > tcpprobename <- "cubic+rcv_cc"
+# > d2 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+# > d1$type="A"
+# > d2$type="B"
+# . . . for all small frames
+# > d3 <- rbind(d1, d2) # this makes 1 big frame
+#
+# plot it as ECDF
+# ggplot(d3, aes(SRTT/1000, colour=type)) + stat_ecdf(size=0.5)
+
 dev.off()

@@ -45,7 +45,7 @@ cwnd_min <- min(tcp_probe$CWND, na.rm=TRUE)
 cwnd_max <- max(tcp_probe$CWND, na.rm=TRUE)
 cwnd_limits <- c(cwnd_min, cwnd_max)
 
-tcp_probe$SSTHRESH[tcp_probe$SSTHRESH >= 2.147e+09] <- NA
+#tcp_probe$SSTHRESH[tcp_probe$SSTHRESH >= 2.147e+09] <- NA
 tcp_probe$WND[tcp_probe$WND >= 2962944] <- NA
 tcp_probe$rcv_wnd[tcp_probe$rcv_wnd >= 2962944] <- NA
 
@@ -55,14 +55,17 @@ tcp_probe <- cbind(tcp_probe, Time)
 
 # sort by Time, then Client
 tcp_probe <- tcp_probe[with(tcp_probe, order(Time, Client)), ]
-tcp_probe$Client <- factor(as.numeric(tcp_probe$Client) - 1)
+tcp_probe$Client <- factor(as.numeric(tcp_probe$Client))
 
-tcp_probe <- tcp_probe[grepl(server, tcp_probe$Server), ]
+# why does unique(tcp_probe$Client) still have too many levels after this (barring external fixing)?
+tcp_probe <- tcp_probe[grepl(paste(server, "(:|$)", sep=""), tcp_probe$Server), ]
 
 #print(tcp_probe)
 
-colourCount = length(unique(tcp_probe$Client))
+colourCount = max(2, length(unique(tcp_probe$Client)))
 getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+
+#print(getPalette(colourCount))
 
 print("cwnd+ssthresh+wnd")
 
@@ -72,9 +75,9 @@ breaks <- axTicks(side=2)
 png(file=paste("cwnd+ssthresh+wnd-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
 qplot(Time, CWND, data = tcp_probe, colour = Client, geom = "line") +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	geom_point(data = tcp_probe, aes_string(x="Time", y="SSTHRESH"), shape = 0, size = 2) +
 	geom_point(data = tcp_probe, aes_string(x="Time", y="WND"), shape = 1, size = 2) +
-	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("log CWND line, SSTHRESH square, WND circle (segments)") +
 	xlab("Time (s)") +
 	scale_y_log10(limits=cwnd_limits, breaks=breaks) +
@@ -87,6 +90,7 @@ print("cwnd+ssthresh")
 png(file=paste("cwnd+ssthresh-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
 qplot(Time, CWND, data = tcp_probe, colour = Client, geom = "line") +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	geom_point(data = tcp_probe, aes_string(x="Time", y="SSTHRESH"), shape = 0, size = 2) +
 	ylab("log CWND line, SSTHRESH point (segments)") +
 	xlab("Time (s)") +
@@ -112,6 +116,7 @@ print("wnd")
 png(file=paste("wnd-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
 qplot(Time, WND, data = tcp_probe, colour = Client, geom = "line") +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("log WND (segments)") +
 	xlab("Time (s)") +
 	scale_y_log10(limits=c(min(tcp_probe$WND, na.rm=TRUE), max(tcp_probe$WND, na.rm=TRUE))) +
@@ -127,12 +132,16 @@ breaks <- axTicks(side=2)
 
 png(file=paste("ssthresh-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
+ymin <- min(tcp_probe$SSTHRESH, na.rm=TRUE)
+ymax <- max(tcp_probe$SSTHRESH, na.rm=TRUE)
+
 qplot(Time, SSTHRESH, data = tcp_probe, colour = Client, geom = "line") +
-	ylab("log SSTHRESH (segments)") +
-	xlab("Time (s)") +
-	scale_y_log10(limits=c(min(tcp_probe$SSTHRESH, na.rm=TRUE), max(tcp_probe$SSTHRESH, na.rm=TRUE)), breaks=breaks) +
-	guides(fill = guide_legend(reverse = TRUE)) +
-	theme_bw()
+      scale_fill_manual(values = getPalette(colourCount)) +
+      ylab("log SSTHRESH (segments)") +
+      xlab("Time (s)") +
+      scale_y_log10(limits=c(ymin, ymax), breaks=breaks) +
+      guides(fill = guide_legend(reverse = TRUE)) +
+      theme_bw()
 
 dev.off()
 
@@ -145,6 +154,7 @@ png(file=paste("srtt-", server, ".png", sep=""), height=1024, width=1024, points
 
 srtt_max <- max(tcp_probe$SRTT, na.rm=TRUE)
 qplot(Time, SRTT, data = tcp_probe, colour = Client, geom = "jitter") +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab(paste("log SRTT", rtt_units)) +
 	xlab("Time (s)") +
 	scale_y_log10(limits=c(rtt_min, srtt_max), breaks=breaks) +
@@ -157,7 +167,22 @@ print("srtt-cdf")
 png(file=paste("srtt-cdf-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
 
 qplot(SRTT, data = tcp_probe, colour = Client, stat = "ecdf", geom = "step") +
+	scale_fill_manual(values = getPalette(colourCount)) +
 	ylab("CDF(SRTT)") +
+	xlab(paste("log SRTT", rtt_units)) +
+	scale_x_log10(limits=c(rtt_min, srtt_max), breaks=breaks) +
+	guides(fill = guide_legend(reverse = TRUE)) +
+	theme_bw() +
+	theme(panel.grid.minor = element_line(colour="grey", linetype="dotted"))
+
+dev.off()
+
+print("srtt-pdf")
+png(file=paste("srtt-pdf-", server, ".png", sep=""), height=1024, width=1024, pointsize=12)
+
+qplot(SRTT, data = tcp_probe, colour = Client, stat = "density", geom = "step") +
+	scale_fill_manual(values = getPalette(colourCount)) +
+	ylab("PDF(SRTT)") +
 	xlab(paste("log SRTT", rtt_units)) +
 	scale_x_log10(limits=c(rtt_min, srtt_max), breaks=breaks) +
 	guides(fill = guide_legend(reverse = TRUE)) +
