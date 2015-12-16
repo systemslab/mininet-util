@@ -17,7 +17,7 @@ if (length(argv) < 2) {
         usage()
 }
 
-maxbw <- argv[1]
+maxbw <- as.numeric(argv[1])
 iperfname <- argv[2]
 
 library(ggplot2)
