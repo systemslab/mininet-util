@@ -112,7 +112,7 @@ if (n > 7) {
 	tcpprobename <- argv[9]
 	d8 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d8tshifted <- d8$Time - min(d8$Time)
-	maxt <- max(maxt, d7tshifted)
+	maxt <- max(maxt, d8tshifted)
 	srtt_max <- max(srtt_max, d8$SRTT, na.rm=TRUE) / rtt_scale
 	srtt_max99999th <- max(srtt_max99999th, quantile(d8$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
 	srtt_min00001st <- min(srtt_min00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
