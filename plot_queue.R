@@ -3,7 +3,7 @@
 argv <- commandArgs(TRUE)
 
 usage <- function() {
-	print("Usage: plot* <data1> <data2> <data3> <data4> <data5> <data6> <data7> <data8>")
+	print("Usage: plot* <data1> <data2> <data3> <data4> <data5> <data6> <data7> <data8> <data9>")
 	quit()
 }
 
@@ -92,9 +92,21 @@ if (length(argv) > 7) {
 	maxq <- max(maxq, d8$V2)
 }
 
+if (length(argv) > 8) {
+	d9name <- argv[9]
+	d9 <- read.table(d9name, sep=",", header=F)
+	d9tshifted <- d9$V1 - min(d9$V1)
+	maxt <- max(maxt, d7tshifted)
+	t$d9 <- d9tshifted
+	qlens$d9 <- d9$V2
+	maxq <- max(maxq, d9$V2)
+}
+
 png(file="qlen.png", height=900, width=1500, pointsize=12)
 
-colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
+library(RColorBrewer)
+# colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
+colors <- brewer.pal(11, "Paired")
 
 # Trim off excess margin space (bottom, left, top, right)
 #par(mar=c(4.2, 3.8, 0.2, 0.2))
@@ -122,8 +134,8 @@ legend("left", argv, cex=1.0,
 # Turn off device driver (to flush output)
 dev.off()
 
-png(file="qlen-cdf.png", height=800, width=800, pointsize=12)
-plot(0, 0, xlab="Queue Length (packets)", ylab="Probability", xlim=c(0, maxq), ylim=c(0, 1),
+png(file="qlen-cdf.png", height=800, width=800, pointsize=18)
+plot(0, 0, xlab="Queue Length (packets)", ylab="ECDF(Queue Length)", xlim=c(0, maxq), ylim=c(0, 1),
 	type="n", axes=F, ann=T)
 for (i in 1:length(argv)) {
 	lines(ecdf(unlist(qlens[i])), lty=i, pch=i, lw=2, col=colors[i])

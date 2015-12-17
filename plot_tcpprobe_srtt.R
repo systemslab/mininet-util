@@ -32,9 +32,11 @@ d1 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 d1tshifted <- d1$Time - min(d1$Time, na.rm=TRUE)
 maxt <- max(d1tshifted, na.rm=TRUE)
 
-colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
-ltys <- rep(1:8)
-pchs <- rep(1:8)
+library(RColorBrewer)
+# colors <- c("red", "darkolivegreen3", "cornflowerblue", "plum4", "darksalmon", "aquamarine", "darkgoldenrod1", "black")
+colors <- brewer.pal(11, "Paired")
+ltys <- rep(1:20)
+pchs <- rep(1:20)
 
 if (n == 1) {
 	require(hexbin)
@@ -45,8 +47,12 @@ if (n == 1) {
 
 srtt_min <- min(d1$SRTT, na.rm=TRUE) / rtt_scale
 srtt_max <- max(d1$SRTT, na.rm=TRUE) / rtt_scale
-srtt_max99999th <- quantile(d1$SRTT, c(0.99999)) / rtt_scale
-srtt_min00001st <- quantile(d1$SRTT, c(0.00001)) / rtt_scale
+srtt_99999th <- quantile(d1$SRTT, c(0.99999)) / rtt_scale
+srtt_00001st <- quantile(d1$SRTT, c(0.00001)) / rtt_scale
+print(paste(tcpprobename, "99th", quantile(d1$SRTT, c(0.99))))
+print(paste(tcpprobename, "99.9th", quantile(d1$SRTT, c(0.999))))
+print(paste(tcpprobename, "99.99th", quantile(d1$SRTT, c(0.9999))))
+print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d1$SRTT, c(0.99)) * rtt_scale))
 
 if (n > 1) {
 	tcpprobename <- argv[3]
@@ -54,8 +60,12 @@ if (n > 1) {
 	d2tshifted <- d2$Time - min(d2$Time, na.rm=TRUE)
 	maxt <- max(maxt, d2tshifted, na.rm=TRUE)
 	srtt_max <- max(srtt_max, d2$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d2$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d2$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d2$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d2$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d2$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d2$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d2$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d2$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 2) {
@@ -64,8 +74,12 @@ if (n > 2) {
 	d3tshifted <- d3$Time - min(d3$Time)
 	maxt <- max(maxt, d3tshifted)
 	srtt_max <- max(srtt_max, d3$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d3$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d3$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d3$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d3$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d3$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d3$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d3$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d3$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 3) {
@@ -74,8 +88,12 @@ if (n > 3) {
 	d4tshifted <- d4$Time - min(d4$Time)
 	maxt <- max(maxt, d4tshifted)
 	srtt_max <- max(srtt_max, d4$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d4$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d4$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d4$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d4$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d4$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d4$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d4$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d4$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 4) {
@@ -84,8 +102,12 @@ if (n > 4) {
 	d5tshifted <- d5$Time - min(d5$Time)
 	maxt <- max(maxt, d5tshifted)
 	srtt_max <- max(srtt_max, d5$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d5$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d5$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d5$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d5$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d5$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.99th", quantile(d5$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.9th", quantile(d5$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d5$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 5) {
@@ -94,8 +116,12 @@ if (n > 5) {
 	d6tshifted <- d6$Time - min(d6$Time)
 	maxt <- max(maxt, d6tshifted)
 	srtt_max <- max(srtt_max, d6$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d6$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d6$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d6$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d6$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d6$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d6$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d6$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d6$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 6) {
@@ -104,8 +130,12 @@ if (n > 6) {
 	d7tshifted <- d7$Time - min(d7$Time)
 	maxt <- max(maxt, d7tshifted)
 	srtt_max <- max(srtt_max, d7$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d7$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d7$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d7$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d7$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d7$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d7$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d7$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d7$SRTT, c(0.99)) * rtt_scale))
 }
 
 if (n > 7) {
@@ -114,8 +144,68 @@ if (n > 7) {
 	d8tshifted <- d8$Time - min(d8$Time)
 	maxt <- max(maxt, d8tshifted)
 	srtt_max <- max(srtt_max, d8$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_max99999th <- max(srtt_max99999th, quantile(d8$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_min00001st <- min(srtt_min00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d8$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d8$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d8$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d8$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d8$SRTT, c(0.99)) * rtt_scale))
+}
+
+if (n > 8) {
+	tcpprobename <- argv[10]
+	d9 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+	d9tshifted <- d9$Time - min(d9$Time)
+	maxt <- max(maxt, d9tshifted)
+	srtt_max <- max(srtt_max, d9$SRTT, na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d9$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d9$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d9$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d9$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d9$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d9$SRTT, c(0.99)) * rtt_scale))
+}
+
+if (n > 9) {
+	tcpprobename <- argv[11]
+	d10 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+	d10tshifted <- d10$Time - min(d10$Time)
+	maxt <- max(maxt, d10tshifted)
+	srtt_max <- max(srtt_max, d10$SRTT, na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d10$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d10$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d10$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d10$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d10$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d10$SRTT, c(0.99)) * rtt_scale))
+}
+
+if (n > 10) {
+	tcpprobename <- argv[12]
+	d11 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+	d11tshifted <- d11$Time - min(d11$Time)
+	maxt <- max(maxt, d11tshifted)
+	srtt_max <- max(srtt_max, d11$SRTT, na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d11$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d11$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d11$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d11$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d11$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d11$SRTT, c(0.99)) * rtt_scale))
+}
+
+if (n > 11) {
+	tcpprobename <- argv[13]
+	d12 <- read.table(tcpprobename, head=F, col.names=probe_columns)
+	d12tshifted <- d12$Time - min(d12$Time)
+	maxt <- max(maxt, d12tshifted)
+	srtt_max <- max(srtt_max, d12$SRTT, na.rm=TRUE) / rtt_scale
+	srtt_99999th <- max(srtt_99999th, quantile(d12$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
+	srtt_00001st <- min(srtt_00001st, quantile(d12$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	print(paste(tcpprobename, "99th", quantile(d12$SRTT, c(0.99))))
+	print(paste(tcpprobename, "99.9th", quantile(d12$SRTT, c(0.999))))
+	print(paste(tcpprobename, "99.99th", quantile(d12$SRTT, c(0.9999))))
+	print(paste(tcpprobename, "99th latency index", rtt_min / quantile(d12$SRTT, c(0.99)) * rtt_scale))
 }
 
 png(file="srtt.png", height=900, width=1500, pointsize=12)
@@ -144,6 +234,18 @@ if (n > 6) {
 if (n > 7) {
 	lines(d8tshifted, d8$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[8])
 }
+if (n > 8) {
+	lines(d9tshifted, d9$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[9])
+}
+if (n > 9) {
+	lines(d10tshifted, d10$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[10])
+}
+if (n > 10) {
+	lines(d11tshifted, d11$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[11])
+}
+if (n > 11) {
+	lines(d12tshifted, d12$SRTT / rtt_scale, type="o", lty=0, pch=8, lw=1, cex=0.5, col=colors[12])
+}
 
 legend("topright", tcpprobenames, cex=1.0, col=colors[1:n],
 	lty=ltys[1:n], pch=pchs[1:n], lwd=3, bty="n");
@@ -154,8 +256,10 @@ axis(2, las=1, cex.axis=1.0)
 # Turn off device driver (to flush output)
 dev.off()
 
-png(file="srtt-cdf.png", height=800, width=800, pointsize=12)
-plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="ECDF(SRTT)", xlim=c(rtt_min, srtt_max99999th), ylim=c(0, 1),
+print(paste("rtt min, srtt_00001st srtt_99999th", rtt_min, srtt_00001st, srtt_99999th))
+
+png(file="srtt-cdf.png", height=800, width=800, pointsize=18)
+plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="ECDF(SRTT)", xlim=c(rtt_min, srtt_99999th), ylim=c(0, 1),
 	log="x", type="n", axes=F, ann=T)
 
 lines(ecdf(d1$SRTT / rtt_scale), lw=2, lty=1, pch=1, col=colors[1])
@@ -179,6 +283,18 @@ if (n > 6) {
 }
 if (n > 7) {
 	lines(ecdf(d8$SRTT / rtt_scale), lw=2, lty=8, pch=8, col=colors[8])
+}
+if (n > 8) {
+	lines(ecdf(d9$SRTT / rtt_scale), lw=2, lty=9, pch=9, col=colors[9])
+}
+if (n > 9) {
+	lines(ecdf(d10$SRTT / rtt_scale), lw=2, lty=10, pch=10, col=colors[10])
+}
+if (n > 10) {
+	lines(ecdf(d11$SRTT / rtt_scale), lw=2, lty=11, pch=11, col=colors[11])
+}
+if (n > 11) {
+	lines(ecdf(d12$SRTT / rtt_scale), lw=2, lty=12, pch=12, col=colors[12])
 }
 
 axis(1, las=1, cex.axis=1.0)
