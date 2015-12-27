@@ -35,26 +35,26 @@ results["ideal"] = o
 
 # Capped at one 10th, but fair otherwise
 results["capped"] = [
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
-     50000000 / 20,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
+     50000000 / 20.,
      ]
 
 # One greedy flow
@@ -86,9 +86,17 @@ def print_stats(results):
     scenarios.sort()
     for scenario in scenarios:
         t = results[scenario]
+
+        lt = len(t)
+        lo = len(o)
+        if lt < lo:
+            t.extend([0.0] * (lo -lt))
+
         print "{}: bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)/pow(10, 6)) for bw in t])
+
         x = [f/o[i] for i, f in enumerate(t)]
         print "{}: normalized bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)) for bw in x])
+
         j = float(sum(x) ** 2) / (len(x) * sum([s ** 2 for s in x]))
     
         print "{}: fraction of ideal aggregate bandwidth {:.2f}".format(scenario, sum(t)/sum(o))
