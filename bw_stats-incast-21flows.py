@@ -86,11 +86,11 @@ def print_stats(results):
     scenarios.sort()
     for scenario in scenarios:
         t = results[scenario]
+        print "{}: bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)/pow(10, 6)) for bw in t])
         x = [f/o[i] for i, f in enumerate(t)]
+        print "{}: normalized bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)) for bw in x])
         j = float(sum(x) ** 2) / (len(x) * sum([s ** 2 for s in x]))
     
-        print "{}: bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)/pow(10, 6)) for bw in t])
-        print "{}: normalized bandwidths over entire period {}".format(scenario, ["{:.2f}".format(float(bw)) for bw in x])
         print "{}: fraction of ideal aggregate bandwidth {:.2f}".format(scenario, sum(t)/sum(o))
         print "{}: JFI {:.4f}".format(scenario, j)
         print
