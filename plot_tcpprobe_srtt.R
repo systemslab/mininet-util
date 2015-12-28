@@ -45,10 +45,10 @@ if (n == 1) {
 	plot(hbinsd1, xlab="Time (s)", ylab=paste("SRTT\n", rtt_units))
 }
 
-srtt_min <- min(d1$SRTT, na.rm=TRUE) / rtt_scale
-srtt_max <- max(d1$SRTT, na.rm=TRUE) / rtt_scale
-srtt_99999th <- quantile(d1$SRTT, c(0.99999)) / rtt_scale
-srtt_00001st <- quantile(d1$SRTT, c(0.00001)) / rtt_scale
+srtt_min <- min(d1$SRTT, na.rm=TRUE)
+srtt_max <- max(d1$SRTT, na.rm=TRUE)
+srtt_99999th <- quantile(d1$SRTT, c(0.99999))
+srtt_00001st <- quantile(d1$SRTT, c(0.00001))
 print(paste(tcpprobename, "99th", quantile(d1$SRTT, c(0.99))))
 print(paste(tcpprobename, "99.9th", quantile(d1$SRTT, c(0.999))))
 print(paste(tcpprobename, "99.99th", quantile(d1$SRTT, c(0.9999))))
@@ -59,9 +59,9 @@ if (n > 1) {
 	d2 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d2tshifted <- d2$Time - min(d2$Time, na.rm=TRUE)
 	maxt <- max(maxt, d2tshifted, na.rm=TRUE)
-	srtt_max <- max(srtt_max, d2$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d2$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d2$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d2$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d2$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d2$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d2$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d2$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d2$SRTT, c(0.9999))))
@@ -73,9 +73,9 @@ if (n > 2) {
 	d3 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d3tshifted <- d3$Time - min(d3$Time)
 	maxt <- max(maxt, d3tshifted)
-	srtt_max <- max(srtt_max, d3$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d3$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d3$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d3$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d3$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d3$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d3$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d3$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d3$SRTT, c(0.9999))))
@@ -87,9 +87,9 @@ if (n > 3) {
 	d4 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d4tshifted <- d4$Time - min(d4$Time)
 	maxt <- max(maxt, d4tshifted)
-	srtt_max <- max(srtt_max, d4$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d4$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d4$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d4$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d4$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d4$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d4$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d4$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d4$SRTT, c(0.9999))))
@@ -101,9 +101,9 @@ if (n > 4) {
 	d5 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d5tshifted <- d5$Time - min(d5$Time)
 	maxt <- max(maxt, d5tshifted)
-	srtt_max <- max(srtt_max, d5$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d5$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d5$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d5$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d5$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d5$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d5$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.99th", quantile(d5$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.9th", quantile(d5$SRTT, c(0.9999))))
@@ -115,9 +115,9 @@ if (n > 5) {
 	d6 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d6tshifted <- d6$Time - min(d6$Time)
 	maxt <- max(maxt, d6tshifted)
-	srtt_max <- max(srtt_max, d6$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d6$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d6$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d6$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d6$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d6$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d6$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d6$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d6$SRTT, c(0.9999))))
@@ -129,9 +129,9 @@ if (n > 6) {
 	d7 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d7tshifted <- d7$Time - min(d7$Time)
 	maxt <- max(maxt, d7tshifted)
-	srtt_max <- max(srtt_max, d7$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d7$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d7$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d7$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d7$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d7$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d7$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d7$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d7$SRTT, c(0.9999))))
@@ -143,9 +143,9 @@ if (n > 7) {
 	d8 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d8tshifted <- d8$Time - min(d8$Time)
 	maxt <- max(maxt, d8tshifted)
-	srtt_max <- max(srtt_max, d8$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d8$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d8$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d8$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d8$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d8$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d8$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d8$SRTT, c(0.9999))))
@@ -157,9 +157,9 @@ if (n > 8) {
 	d9 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d9tshifted <- d9$Time - min(d9$Time)
 	maxt <- max(maxt, d9tshifted)
-	srtt_max <- max(srtt_max, d9$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d9$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d9$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d9$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d9$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d9$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d9$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d9$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d9$SRTT, c(0.9999))))
@@ -171,9 +171,9 @@ if (n > 9) {
 	d10 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d10tshifted <- d10$Time - min(d10$Time)
 	maxt <- max(maxt, d10tshifted)
-	srtt_max <- max(srtt_max, d10$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d10$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d10$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d10$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d10$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d10$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d10$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d10$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d10$SRTT, c(0.9999))))
@@ -185,9 +185,9 @@ if (n > 10) {
 	d11 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d11tshifted <- d11$Time - min(d11$Time)
 	maxt <- max(maxt, d11tshifted)
-	srtt_max <- max(srtt_max, d11$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d11$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d11$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d11$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d11$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d11$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d11$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d11$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d11$SRTT, c(0.9999))))
@@ -199,9 +199,9 @@ if (n > 11) {
 	d12 <- read.table(tcpprobename, head=F, col.names=probe_columns)
 	d12tshifted <- d12$Time - min(d12$Time)
 	maxt <- max(maxt, d12tshifted)
-	srtt_max <- max(srtt_max, d12$SRTT, na.rm=TRUE) / rtt_scale
-	srtt_99999th <- max(srtt_99999th, quantile(d12$SRTT, c(0.99999)), na.rm=TRUE) / rtt_scale
-	srtt_00001st <- min(srtt_00001st, quantile(d12$SRTT, c(0.00001)), na.rm=TRUE) / rtt_scale
+	srtt_max <- max(srtt_max, d12$SRTT, na.rm=TRUE)
+	srtt_99999th <- max(srtt_99999th, quantile(d12$SRTT, c(0.99999)), na.rm=TRUE)
+	srtt_00001st <- min(srtt_00001st, quantile(d12$SRTT, c(0.00001)), na.rm=TRUE)
 	print(paste(tcpprobename, "99th", quantile(d12$SRTT, c(0.99))))
 	print(paste(tcpprobename, "99.9th", quantile(d12$SRTT, c(0.999))))
 	print(paste(tcpprobename, "99.99th", quantile(d12$SRTT, c(0.9999))))
@@ -211,7 +211,7 @@ if (n > 11) {
 png(file="srtt.png", height=900, width=1500, pointsize=12)
 plot(d1tshifted, d1$SRTT / rtt_scale, type="o", col=colors[1], lty=0, pch=1, lwd=1, cex=0.5,
 	axes=F, ann=T, xlab="Time (s)", ylab=paste("Log of Smoothed RTT", rtt_units),
-	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max))
+	log="y", xlim=c(0, min(maxt, max(d1tshifted))), ylim=c(rtt_min, srtt_max / rtt_scale))
 
 if (n > 1) {
 	lines(d2tshifted, d2$SRTT / rtt_scale, type="o", lty=0, pch=2, lw=1, cex=0.5, col=colors[2])
@@ -259,7 +259,7 @@ dev.off()
 print(paste("rtt min, srtt_00001st srtt_99999th", rtt_min, srtt_00001st, srtt_99999th))
 
 png(file="srtt-cdf.png", height=800, width=800, pointsize=18)
-plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="ECDF(SRTT)", xlim=c(rtt_min, srtt_99999th), ylim=c(0, 1),
+plot(1, 1, xlab=paste("Log of Smoothed RTT", rtt_units), ylab="ECDF(SRTT)", xlim=c(rtt_min, srtt_99999th / rtt_scale), ylim=c(0, 1),
 	log="x", type="n", axes=F, ann=T)
 
 lines(ecdf(d1$SRTT / rtt_scale), lw=2, lty=1, pch=1, col=colors[1])
