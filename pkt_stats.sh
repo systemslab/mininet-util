@@ -5,7 +5,7 @@
 #echo "segments_sent_out segments_retransmitted percent_retransmitted fast_retransmits percent_fast_retransmits lost_retransmits percent_lost_retransmits packets_queued_switch packets_dropped_switch percent_dropped"
 echo -e "segTX\treTX\t%reTX\tfasReTX\t%fasReTX\tlReTX\t%lReTX\tpktsQd\tdrop\t%drop"
 
-files=$(ls $1/netstat-h[2-9]*.txt $1/netstat-h[2-9]*-after.txt 2> /dev/null)
+files=$(ls $1/netstat-h[2-9]*-after.txt 2> /dev/null)
 script=$(cat <<'RETX'
 BEGIN {
   my $sent = 0;
