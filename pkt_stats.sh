@@ -59,7 +59,7 @@ perl -ne "${script}" $files
 script=$(cat <<'DROP'
 if (/Sent (\d+) bytes (\d+) pkt \(dropped (\d+)/) {
   if ($3 == 0) {
-    printf("%d\t%d\t0.00\n", $2, $3);
+    printf("%d\t%d\t%3.4f\n", $2, $3, 0.0);
   } elsif ($3 > 0 && 100 * $3 / $2 < 0.0001) {
     printf("%d\t%d\t> 0\n", $2, $3);
   } else {
@@ -71,5 +71,5 @@ DROP
 
 test -e $1/tc-stats-after.txt && \
 grep -A1 "htb 5: dev s1-eth1" $1/tc-stats-after.txt | perl -ne "${script}" || \
-echo -e "NA\tNA\tNA
+echo -e "NA\tNA\tNA"
 
