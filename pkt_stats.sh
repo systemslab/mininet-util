@@ -21,48 +21,30 @@ BEGIN {
 
 END {
   if($sent == 0) {
-    printf("NA\tNA\tNA\tNA\tNA\tNA\t");
+    printf("NA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n");
     exit;
   }
 
   if($retrans == 0) {
-    printf("%d\t%d\t%3.4f\t%d\t%3.4f\t", $sent, 0, 0.0, 0, 0.0);
+    printf("%d\t%d\t%3.4f\t%d\t%3.4f\t%d\t%3.4f\t", $sent, 0, 0.0, 0, 0.0, 0, 0.0);
     exit;
   } else {
-    printf("%d\t%d\t", $sent, $retrans);
-  }
-
-  my $percent_retrans = 100 * $retrans / $sent;
-  if($percent_retrans < 0.0001) {
-    print "> 0\t";
-  } else {
-    printf("%3.4f\t", $percent_retrans);
+    my $percent_retrans = 100 * $retrans / $sent;
+    printf("%d\t%d\t%3.4f\t", $sent, $retrans, $percent_retrans);
   }
 
   if($fastretrans == 0) {
     printf("%d\t%3.4f\t", 0, 0.0);
   } else {
-    printf("%d\t", $fastretrans);
     my $percent_fastretrans = 100 * $fastretrans / $retrans;
-    if($percent_fastretrans < 0.0001) {
-      print "> 0\t";
-    } else {
-      printf("%3.4f\t", $percent_fastretrans);
-    }
+    printf("%d\t%3.4f\t", $fastretrans, $percent_fastretrans);
   }
 
   if($retrans_lost == 0) {
     printf("%d\t%3.4f\t", 0, 0.0);
-    exit;
   } else {
-    printf("%d\t", $retrans_lost);
-  }
-
-  my $percent_retrans_lost = 100 * $retrans_lost / $retrans;
-  if ($retrans_lost > 0 && $percent_retrans_lost < 0.0001) {
-    print "> 0\t";
-  } else {
-    printf("%3.4f\t", $percent_retrans_lost);
+    my $percent_retrans_lost = 100 * $retrans_lost / $retrans;
+    printf("%d\t%3.4f\t", $retrans_lost, $percent_retrans_lost);
   }
 }
 RETX
@@ -70,20 +52,16 @@ RETX
 
 perl -ne "${script}" $files
 
+#  Sent 2394923528 bytes 1581936 pkt (dropped 0, overlimits 255627 requeues 0) 
 script=$(cat <<'DROP'
 if (/Sent (\d+) bytes (\d+) pkt \(dropped (\d+)/) {
-  if ($3 == 0) {
-    printf("%d\t%d\t%3.4f\n", $2, $3, 0.0);
-  } elsif ($3 > 0 && 100 * $3 / $2 < 0.0001) {
-    printf("%d\t%d\t> 0\n", $2, $3);
-  } else {
-    printf("%d\t%d\t%3.4f\n", $2, $3, 100 * $3 / $2)
-  }
+  printf("%d\t%d\t%3.4f\n", $2, $3, 100 * $3 / $2)
+} else {
+  printf("NA\tNA\tNA\n")
 }
 DROP
 )
 
 test -e $1/tc-stats-after.txt && \
-grep -A1 "htb 5: dev s1-eth1" $1/tc-stats-after.txt | perl -ne "${script}" || \
-echo -e "NA\tNA\tNA"
+grep -A1 "htb 5: dev s1-eth1" $1/tc-stats-after.txt | tail -1 | perl -ne "${script}"
 
