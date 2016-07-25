@@ -90,6 +90,11 @@ mycolors = c("#C8C44A",
 "#CAE5B6",
 "#CFE139")
 
+library(RColorBrewer)
+colourCount = length(unique(iperf$Client))
+getPalette = colorRampPalette(brewer.pal(9, "Set1"))
+mycolors = getPalette(colourCount)
+
 qplot(Start, Rate, data = iperf, fill = Client, geom = "bar", stat = "identity") +
 	ylim(0, maxbw * 1000000) +
 	scale_fill_manual(values = mycolors) +
