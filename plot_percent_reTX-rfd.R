@@ -18,13 +18,14 @@ library(ggplot2)
 data <- read.table(filename, header=T)
 data.m <- reshape2::melt(data, id.vars = NULL)
 
-pdf(file=paste("percent_reTX-rfd", ".pdf", sep=""), height=3, width=5, pointsize=40)
+pdf(file=paste("percent_reTX-rfd", ".pdf", sep=""), height=6, width=10, pointsize=18)
 ggplot(data.m, aes(x = variable, y = value, fill = variable)) +
 	geom_violin() +
 	geom_boxplot(width=0.075, fill="white") +
 	theme_minimal() +
+	theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
 	theme(legend.position="none") +
-	scale_x_discrete(limits=c("CUBIC", "CUBIC.RFD", "DCTCP.Reno", "DCTCP.Reno.RFD")) +
+	scale_x_discrete(limits=c("CUBIC", "CUBIC.RFD", "DCTCP.Loss", "DCTCP.Loss.With.Inigo.Receiver")) +
         scale_y_log10(breaks=c(0.001, 0.1, 1, 4)) +
 	labs(title="",x="", y = "Percent of Segments Retransmitted")
 
